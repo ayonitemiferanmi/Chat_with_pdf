@@ -7,7 +7,6 @@ Created on Fri Oct 11 13:02:13 2024
 import pysqlite3
 import sys
 sys.modules["sqlite3"] = sys.modules
-import chromadb
 import tempfile
 import streamlit as st
 from langchain.document_loaders import PyPDFLoader
