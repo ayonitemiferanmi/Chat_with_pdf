@@ -7,3 +7,4 @@ gpt4all
 langchain_chroma
 transformers
 langchain-cli == 0.0.22
+langchain migrate
