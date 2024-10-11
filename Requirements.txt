@@ -1,0 +1,8 @@
+langchain
+chromadb 
+pypdf 
+pytest
+langchain-community 
+gpt4all
+langchain_chroma
+transformers
