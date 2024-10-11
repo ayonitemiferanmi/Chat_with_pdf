@@ -9,7 +9,7 @@ import streamlit as st
 from langchain.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.embeddings import GPT4AllEmbeddings
-from langchain_chroma import Chroma
+from langchain_chroma.vectorstores import Chroma
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, AutoModelForDocumentQuestionAnswering
 from transformers import pipeline
 from langchain_community.llms import huggingface_pipeline
