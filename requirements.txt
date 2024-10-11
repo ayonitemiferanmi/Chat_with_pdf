@@ -1,5 +1,5 @@
 langchain
-chromadb 
+chromadb == 0.3.29
 pypdf 
 pytest
 langchain-community 
@@ -7,4 +7,3 @@ gpt4all
 langchain_chroma
 transformers
 langchain-cli == 0.0.22
-sqlite3 >= 3.35.0.
