@@ -211,11 +211,8 @@ def app():
 
 
     # get the output of the question_answer function
-  
-      output = answer_question()
-      st.write(
-         output 
-      )
+  output = answer_question()
+  st.write(output)
         
         
  
