@@ -36,6 +36,9 @@ def app():
     
     # Upload a document symbol
     container = st.sidebar.container()
+
+    # create the question widget
+    question_widget = st.chat_input("Ask your question")
         
     # Import a side bar where you can upload the document [pdf, docx]    
     uploaded_file = st.sidebar.file_uploader(
@@ -158,6 +161,20 @@ def app():
                 
                 # return the retrievalqa
                 return retrieval
+
+            def answer_question():
+
+                # Initialize the retrieval qa
+                qa = retrieval_qa()
+                # create the if function
+                if question_widget:
+                    # Pass the asked question into the retrievalqa
+                    ans = qa(question_widget)
+                  
+                    # return the annswer
+                    final_result = st.write(ans["result"])
+                else:
+                    final_result = st.warning("Ask your question", icon="❗")
         
         
         elif uploaded_file != None and uploaded_file.name[-3:] == "txt":
@@ -190,21 +207,6 @@ def app():
             # Load it properly
             doc = loader.load()
                       
-    # create the question widget
-    question_widget = st.chat_input("Ask your question")
-
-    # Initialize qa
-    qa = retrieval_qa()
-        
-    if question_widget:
-      
-        # Pass the asked question into the retrievalqa
-        ans = qa(question_widget)
-            
-        # return the annswer
-        st.write(ans["result"])
-    else:
-        st.warning("Ask your question", icon="❗")
   
         
         
