@@ -194,12 +194,10 @@ def app():
     question_widget = st.chat_input("Ask your question")
 
     # Initialize qa
-    qa = None
+    qa = retrieval_qa()
         
     if question_widget:
-        # Load the retrieval_qa
-        qa = retrieval_qa()
-            
+      
         # Pass the asked question into the retrievalqa
         ans = qa(question_widget)
             
