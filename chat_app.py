@@ -130,7 +130,7 @@ def app():
                
                 # creating the transformer's pipeline
                 pipe = pipeline(
-                    ""text2text-generation"",
+                    "text2text-generation",
                     model = model,
                     tokenizer = tokenizer,
                     max_length = 512,
