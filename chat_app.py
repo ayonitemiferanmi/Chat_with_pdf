@@ -161,13 +161,12 @@ def app():
                 
                 # return the retrievalqa
                 return retrieval
-
-            qa = retrieval_qa()
-            # testing qa
-            if qa:
-              st.write("Active")
-            else:
-              st.write("Nahhh")
+  qa = retrieval_qa()
+  # testing qa
+  if qa:
+    st.write("Active")
+  else:
+    st.write("Nahhh")
         
         
         elif uploaded_file != None and uploaded_file.name[-3:] == "txt":
