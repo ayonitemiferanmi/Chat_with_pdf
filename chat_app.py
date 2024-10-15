@@ -211,7 +211,7 @@ def app():
 
 
     # get the output of the question_answer function
-  def a
+  
       output = answer_question()
       st.write(
          output 
