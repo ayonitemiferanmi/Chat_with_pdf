@@ -162,21 +162,12 @@ def app():
                 # return the retrievalqa
                 return retrieval
 
-            #def answer_question():
-
-                # Initialize the retrieval qa
-                #qa = retrieval_qa()
-                # create the if function
-                #if qa:
-                    # Pass the asked question into the retrievalqa
-                    #ans = qa(question_widget)
-                  
-                    # return the annswer
-                    #final_result = ans["result"]
-                #else:
-                    #final_result = st.warning("Ask your question", icon="❗")
-
-                #return final_result
+            qa = retrieval_qa()
+            # testing qa
+            if qa:
+              st.write("Active")
+            else:
+              st.write("Nahhh")
         
         
         elif uploaded_file != None and uploaded_file.name[-3:] == "txt":
