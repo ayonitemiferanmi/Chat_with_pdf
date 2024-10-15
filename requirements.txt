@@ -8,3 +8,5 @@ langchain_chroma
 transformers
 langchain-cli == 0.0.22
 pysqlite3-binary
+torch
+torchvision
