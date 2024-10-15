@@ -47,7 +47,7 @@ def app():
     doc = None
 
     # create the question widget
-    question_widget = st.chat_input("Ask your question")
+    #question_widget = st.chat_input("Ask your question")
     
     # Confirm that a document has been uploaded!!!
     if uploaded_file == None:
@@ -162,21 +162,21 @@ def app():
                 # return the retrievalqa
                 return retrieval
 
-            def answer_question():
+            #def answer_question():
 
                 # Initialize the retrieval qa
-                qa = retrieval_qa()
+                #qa = retrieval_qa()
                 # create the if function
-                if qa:
+                #if qa:
                     # Pass the asked question into the retrievalqa
-                    ans = qa(question_widget)
+                    #ans = qa(question_widget)
                   
                     # return the annswer
-                    final_result = ans["result"]
-                else:
-                    final_result = st.warning("Ask your question", icon="❗")
+                    #final_result = ans["result"]
+                #else:
+                    #final_result = st.warning("Ask your question", icon="❗")
 
-                return final_result
+                #return final_result
         
         
         elif uploaded_file != None and uploaded_file.name[-3:] == "txt":
