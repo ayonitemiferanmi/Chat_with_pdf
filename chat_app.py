@@ -172,9 +172,11 @@ def app():
                     ans = qa(question_widget)
                   
                     # return the annswer
-                    final_result = st.write(ans["result"])
+                    final_result = ans["result"]
                 else:
                     final_result = st.warning("Ask your question", icon="❗")
+
+                return final_result
         
         
         elif uploaded_file != None and uploaded_file.name[-3:] == "txt":
@@ -206,8 +208,13 @@ def app():
             
             # Load it properly
             doc = loader.load()
-                      
-  
+
+
+    # get the output of the question_answer function
+    output = answer_question()
+    st.write(
+       output 
+      )
         
         
  
