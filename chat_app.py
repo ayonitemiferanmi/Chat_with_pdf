@@ -138,7 +138,9 @@ def app():
                 )
                 
                 # creating Huggingface pipeline
-                huggingface_llm = HuggingFacePipeline(pipe)
+                huggingface_llm = HuggingFacePipeline(
+                  pipeline=pipe
+                )
                 
                 # return the huggingface_pipeline
                 return huggingface_llm
