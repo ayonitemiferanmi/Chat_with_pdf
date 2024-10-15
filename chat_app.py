@@ -130,7 +130,7 @@ def app():
                
                 # creating the transformer's pipeline
                 pipe = pipeline(
-                    task = "question-answering",
+                    ""text2text-generation"",
                     model = model,
                     tokenizer = tokenizer,
                     max_length = 512,
