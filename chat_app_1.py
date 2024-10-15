@@ -4,10 +4,10 @@ Created on Fri Oct 11 13:02:13 2024
 
 @author: Rise Networks
 """
-#__import__('pysqlite3')
-#import sys
+__import__('pysqlite3')
+import sys
 
-#sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 import tempfile
 import streamlit as st
 from langchain.document_loaders import PyPDFLoader
