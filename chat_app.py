@@ -36,9 +36,6 @@ def app():
     
     # Upload a document symbol
     container = st.sidebar.container()
-
-    # create the question widget
-    question_widget = st.chat_input("Ask your question")
         
     # Import a side bar where you can upload the document [pdf, docx]    
     uploaded_file = st.sidebar.file_uploader(
@@ -48,6 +45,9 @@ def app():
         
     # Initialize doc
     doc = None
+
+    # create the question widget
+    question_widget = st.chat_input("Ask your question")
     
     # Confirm that a document has been uploaded!!!
     if uploaded_file == None:
