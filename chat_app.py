@@ -189,10 +189,12 @@ def app():
             
             # Load it properly
             doc = loader.load()
-            
-            
+                      
     # create the question widget
     question_widget = st.chat_input("Ask your question")
+
+    # Initialize qa
+    qa = None
         
     if question_widget:
         # Load the retrieval_qa
