@@ -167,7 +167,7 @@ def app():
                 # Initialize the retrieval qa
                 qa = retrieval_qa()
                 # create the if function
-                if question_widget:
+                if qa:
                     # Pass the asked question into the retrievalqa
                     ans = qa(question_widget)
                   
@@ -211,9 +211,10 @@ def app():
 
 
     # get the output of the question_answer function
-    output = answer_question()
-    st.write(
-       output 
+  def a
+      output = answer_question()
+      st.write(
+         output 
       )
         
         
