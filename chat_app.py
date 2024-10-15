@@ -18,7 +18,7 @@ from langchain.embeddings import GPT4AllEmbeddings
 from langchain_chroma import Chroma
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, AutoModelForDocumentQuestionAnswering
 from transformers import pipeline
-from langchain_community.llms import huggingface_pipeline
+from langchain.llms import HuggingFacePipeline
 from langchain.chains import RetrievalQA
 
 # Setting the background color
@@ -138,7 +138,7 @@ def app():
                 )
                 
                 # creating Huggingface pipeline
-                huggingface_llm = huggingface_pipeline(pipe)
+                huggingface_llm = HuggingFacePipeline(pipe)
                 
                 # return the huggingface_pipeline
                 return huggingface_llm
