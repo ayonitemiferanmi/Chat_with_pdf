@@ -120,7 +120,7 @@ def app():
                 return retriever
             
             # creating a transformer pipeline
-            def pipeline():
+            def create_pipeline():
                 
                 # Instantating our model
                 model = AutoModelForSeq2SeqLM.from_pretrained("google/flan-t5-xl")
@@ -131,8 +131,8 @@ def app():
                 # creating the transformer's pipeline
                 pipe = pipeline(
                     "text2text-generation",
-                    model = model,
-                    tokenizer = tokenizer,
+                    model,
+                    tokenizer,
                     max_length = 512,
                     repetition_penalty = 1.15,
                 )
@@ -148,7 +148,7 @@ def app():
                 
                 # creating the retrievalqa
                 retrieval = RetrievalQA.from_chain_type(
-                    llm = pipeline(),
+                    llm = create_pipeline(),
                     chain_type = "stuff",
                     retriever = retriever(),
                     return_source_documents = True
