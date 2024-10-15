@@ -4,15 +4,14 @@ Created on Fri Oct 11 13:02:13 2024
 
 @author: Rise Networks
 """
-__import__('pysqlite3')
-import sys
-sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 import tempfile
 import streamlit as st
 from langchain.document_loaders import PyPDFLoader
+from langchain.document_loaders import Docx2txtLoader
+from langchain.document_loaders.text import TextLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.embeddings import GPT4AllEmbeddings
-from langchain_chroma.vectorstores import Chroma
+from langchain_chroma import Chroma
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, AutoModelForDocumentQuestionAnswering
 from transformers import pipeline
 from langchain_community.llms import huggingface_pipeline
@@ -30,138 +29,177 @@ body {
 
 
 def app():
+    
+    # Upload a document symbol
+    container = st.sidebar.container()
         
     # Import a side bar where you can upload the document [pdf, docx]    
     uploaded_file = st.sidebar.file_uploader(
-        "Upload a document", 
+        "",
         type=["pdf", "docx", "txt"], 
     )
+        
+    # Initialize doc
+    doc = None
     
     # Confirm that a document has been uploaded!!!
     if uploaded_file == None:
         # Prompt them to upload
-        st.warning("Upload a document", icon="⚠️")
+        with container:
+            st.sidebar.warning("Upload a document", icon="⚠️")
     else:
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf",) as temp_file:
-            temp_file.write(uploaded_file.getbuffer())
-            temp_file_path = temp_file.name  # Get the temp file path
-
-        # Load the uploaded file using PyPDFLoader
-        def load_document():
-        
-            # Create an instance of the document loader
+            
+        if uploaded_file != None and uploaded_file.name[-3:] == "pdf":
+            with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf",) as temp_file:
+                temp_file.write(uploaded_file.getbuffer())
+                temp_file_path = temp_file.name  # Get the temp file path
+            
+            # Displaying the file path or filename
+            with container:
+                st.sidebar.success("Document Uploaded", icon="✅")
+            
+            # Load the pdf document using PyPDFLoader
             loader = PyPDFLoader(temp_file_path)
-        
-            # return the loaded document
-            return loader.load()
-    
-        # Split the documents into chunks
-        def split_document():
-        
-            # Load the document
-            document = load_document()
-        
-            # Create an instance of the text splitter
-            text_splitter = RecursiveCharacterTextSplitter(
-                chunk_size = 1500,
-                chunk_overlap = 150
-            )
-        
-            # creating the chunks or dividing the documents into smaller chunks
-            chunks = text_splitter.split_documents(document)
-        
-            # return the smaller chunks
-            return chunks
-    
-        # Create embeddingssss
-        def create_embeddings():
-        
-            # create an instance of the embeddings
-            embedding = GPT4AllEmbeddings()
+            
+            # Load it properly
+            doc = loader.load()
+            
+            def split_document(doc):
+                # Create an instance of the text splitter
+                text_splitter = RecursiveCharacterTextSplitter(
+                    chunk_size = 1500,
+                    chunk_overlap = 150,
+                )
+            
+                # Applying the text splitter instance
+                chunk = text_splitter.split_documents(doc)
+            
+                # return the smaller chunks of the document
+                return chunk
+            
+            # Displaying the first item in the document
+            #st.write(
+                #split_document(doc)[0]
+            #)
+            
+            # create embeddings using GPT4All Embeddingss
+            def embedding():
                 
-            # return the embedded documents
-            return embedding
-    
-        # Creating a vector database
-        def vector_database():
-        
-            # Creating the vector database
-            db = Chroma.from_documents(
-                documents = split_document(),
-                embedding = create_embeddings()
-            )
-        
-            # returning the created database
-            return db
-    
-        # Querying our database
-        def query_db():
-        
-            # creating a question
-            question = "When did Nicodemus meet Jesus?"
-        
-            # using similarity search to affirm
-            database = vector_database()
-        
-            # Provide the answer
-            answer = database.similarity_search(question)
-        
-            # return the answer
-            return answer
-    
-        # Display the answer to confirm what we have
-        st.write(
-            query_db()
-        )
-        
-        # Creating a retriever
-        def retriever():
+                # Create an instance of the embedding
+                embeddings = GPT4AllEmbeddings()
+                
+                # return the embeddings
+                return embeddings
             
-            # instantiating the retriever
-            retriever =  vector_database().as_retriever()
+            # create a vector database using Chroma
+            def vector_database():
+                
+                # Instantiate the vector database
+                db = Chroma.from_documents(
+                    embedding= embedding(), 
+                    documents = split_document(doc)
+                )
+                
+                # return the database
+                return db
             
-            # return the retriever
-            return retriever
+            # creating a retriever
+            def retriever():
+                
+                # loading the database
+                db = vector_database()
+                
+                # creating the retriever
+                retriever = db.as_retriever()
+                
+                # return the retriever
+                return retriever
+            
+            # creating a transformer pipeline
+            def pipeline():
+                
+                # Instantating our model
+                model = AutoModelForSeq2SeqLM.from_pretrained("google/flan-t5-xl")
+                
+                # Instantiating the tokenizer from transformers
+                tokenizer = AutoTokenizer.from_pretrained("google/flan-t5-xl")
+               
+                # creating the transformer's pipeline
+                pipe = pipeline(
+                    task = "question-answering",
+                    model = model,
+                    tokenizer = tokenizer,
+                    max_length = 512,
+                    repetition_penalty = 1.15,
+                )
+                
+                # creating Huggingface pipeline
+                huggingface_llm = huggingface_pipeline(pipe)
+                
+                # return the huggingface_pipeline
+                return huggingface_llm
+            
+            # creating the RetrievalQA
+            def retrieval_qa():
+                
+                # creating the retrievalqa
+                retrieval = RetrievalQA.from_chain_type(
+                    llm = pipeline(),
+                    chain_type = "stuff",
+                    retriever = retriever(),
+                    return_source_documents = True
+                )
+                
+                # return the retrievalqa
+                return retrieval
         
-        # Creating the LLM using a pipeline
-        def create_llm():
-            
-            # Instantiating our tokenizer
-            tokenizer = AutoTokenizer.from_pretrained("google/flan-t5-large")
-            
-            # Instantiating our model
-            model = AutoModelForSeq2SeqLM.from_pretrained('google/flan-t5-large')
-            
-            # creating our pipeline
-            pipe = pipeline(
-                "question-answering",
-                model = model,
-                tokenizer = tokenizer,
-                max_length = 512,
-                repetition_penalty = 1.15
-            )
-            
-            # creating the llm using huggingface pipeline
-            llm = huggingface_pipeline(
-                pipe,
-            )
-            
-            # return the llm
-            return llm
         
-        # Creating the QA
-        def QA():
+        elif uploaded_file != None and uploaded_file.name[-3:] == "txt":
+            with tempfile.NamedTemporaryFile(delete=False, suffix=".txt",) as temp_file:
+                temp_file.write(uploaded_file.getbuffer())
+                temp_file_path = temp_file.name  # Get the temp file path
             
-            # create an instance of the qa
-            qa = RetrievalQA.from_chain_type(
-                llm = create_llm(),
-                chain_type = "stuff",
-                retriever = retriever(),
-                return_source_documents = True
-            )
+            # Displaying the file path or file name
+            with container:
+                st.sidebar.success("Document Uploaded", icon="✅")
             
-            # return the qa
-            return qa
+            # Load the pdf document using PyPDFLoader
+            loader = TextLoader(temp_file_path)
+            
+            # Load it properly
+            doc = loader.load()
+            
+        else:
+            with tempfile.NamedTemporaryFile(delete=False, suffix=".docx",) as temp_file:
+                temp_file.write(uploaded_file.getbuffer())
+                temp_file_path = temp_file.name  # Get the temp file path
+            
+            # Displaying the file path or file name
+            with container:
+                st.sidebar.success("Document Uploaded", icon="✅")
+            
+            # Load the pdf document using PyPDFLoader
+            loader = Docx2txtLoader(temp_file_path)
+            
+            # Load it properly
+            doc = loader.load()
+            
+            
+    # create the question widget
+    question_widget = st.chat_input("Ask your question")
+        
+    if question_widget:
+        # Load the retrieval_qa
+        qa = retrieval_qa()
+            
+        # Pass the asked question into the retrievalqa
+        ans = qa(question_widget)
+            
+        # return the annswer
+        st.write(ans["result"])
+    else:
+        st.warning("Ask your question", icon="❗")
+  
         
         
  
