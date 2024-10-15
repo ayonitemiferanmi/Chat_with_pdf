@@ -132,7 +132,7 @@ def app():
                 pipe = pipeline(
                     "text2text-generation",
                     model,
-                    tokenizer,
+                    tokenizer = tokenizer,
                     max_length = 512,
                     repetition_penalty = 1.15,
                 )
