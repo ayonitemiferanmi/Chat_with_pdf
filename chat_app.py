@@ -101,7 +101,7 @@ def app():
                 embeddings_2 = FastEmbedEmbeddings()
                 
                 # return the embeddings
-                return embeddings_2
+                return embeddings_1
             
             # create a vector database using Chroma
             def vector_database():
@@ -131,24 +131,25 @@ def app():
             def create_pipeline():
                 
                 # Instantating our model
-                model = AutoModelForSeq2SeqLM.from_pretrained("google/flan-t5-xl")
+                #model = AutoModelForSeq2SeqLM.from_pretrained("google/flan-t5-xl")
                 
                 # Instantiating the tokenizer from transformers
-                tokenizer = AutoTokenizer.from_pretrained("google/flan-t5-xl")
+                #tokenizer = AutoTokenizer.from_pretrained("google/flan-t5-xl")
                
                 # creating the transformer's pipeline
-                pipe = pipeline(
-                    "text2text-generation",
-                    model,
-                    tokenizer = tokenizer,
-                    max_length = 512,
-                    repetition_penalty = 1.15,
-                )
+                #pipe = pipeline(
+                 #   "text2text-generation",
+                  #  model,
+                   # tokenizer = tokenizer,
+                   # max_length = 512,
+                   # repetition_penalty = 1.15,
+                #)
                 
                 # creating Huggingface pipeline
-                huggingface_llm = HuggingFacePipeline(
-                  pipeline=pipe
-                )
+                #huggingface_llm = HuggingFacePipeline(
+                  #pipeline=pipe
+                #)
+              
                 # Creating the new llm
                 groq_llm = ChatGroq(
                   model = "llama3-70b-8192",
