@@ -1,6 +1,8 @@
 streamlit
 langchain
 chromadb
+opentelemetry-api 
+opentelemetry-sdk
 pypdf 
 pytest
 langchain-community 
