@@ -11,3 +11,5 @@ pysqlite3-binary
 torch
 torchvision
 langchain-community
+langchain-groq
+fastembed
