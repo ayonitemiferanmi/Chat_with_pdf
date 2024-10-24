@@ -22,7 +22,6 @@ from langchain_chroma import Chroma
 #from langchain.llms import HuggingFacePipeline
 from langchain.chains import RetrievalQA
 from langchain_groq import ChatGroq
-from langchain_community.embeddings.fastembed import FastEmbedEmbeddings
 
 # Setting the background color
 st.markdown("""
