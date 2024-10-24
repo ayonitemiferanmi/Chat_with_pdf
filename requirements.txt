@@ -13,3 +13,4 @@ torch
 torchvision
 langchain-community
 langchain-groq
+fastembed
