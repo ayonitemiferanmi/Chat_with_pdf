@@ -5,7 +5,7 @@ pypdf
 pytest
 langchain-community 
 gpt4all
-langchain_chroma
+langchain-chroma
 transformers
 langchain-cli == 0.0.22
 pysqlite3-binary
