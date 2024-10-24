@@ -9,17 +9,20 @@ import sys
 
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 import tempfile
+import os
 import streamlit as st
 from langchain.document_loaders import PyPDFLoader
 from langchain.document_loaders import Docx2txtLoader
 from langchain.document_loaders.text import TextLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.embeddings import GPT4AllEmbeddings
+from langchain.embeddings import GPT4AllEmbeddings, HuggingFaceEmbeddings
 from langchain_chroma import Chroma
-from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, AutoModelForDocumentQuestionAnswering
-from transformers import pipeline
-from langchain.llms import HuggingFacePipeline
+#from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, AutoModelForDocumentQuestionAnswering
+#from transformers import pipeline
+#from langchain.llms import HuggingFacePipeline
 from langchain.chains import RetrievalQA
+from langchain_groq import ChatGroq
+from langchain_community.embeddings.fastembed import FastEmbedEmbeddings
 
 # Setting the background color
 st.markdown("""
@@ -94,9 +97,11 @@ def app():
                 
                 # Create an instance of the embedding
                 embeddings = GPT4AllEmbeddings()
+                emdeddings_1 = HuggingFaceEmbeddings()
+                embeddings_2 = FastEmbedEmbeddings()
                 
                 # return the embeddings
-                return embeddings
+                return embeddings_2
             
             # create a vector database using Chroma
             def vector_database():
@@ -144,9 +149,17 @@ def app():
                 huggingface_llm = HuggingFacePipeline(
                   pipeline=pipe
                 )
+                # Creating the new llm
+                groq_llm = ChatGroq(
+                  model = "llama3-70b-8192",
+                  temperature = 0,
+                  max_tokens = 1024,
+                  max_retries = 2,
+                  api_key = os.environ["GROQ_API_KEY"]
+                )
                 
                 # return the huggingface_pipeline
-                return huggingface_llm
+                return groq_llm
             
             # creating the RetrievalQA
             def retrieval_qa():
