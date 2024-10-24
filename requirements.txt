@@ -15,3 +15,4 @@ torch
 torchvision
 langchain-community
 langchain-groq
+protobuf==3.20.3
