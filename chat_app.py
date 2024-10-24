@@ -10,6 +10,7 @@ import sys
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 import tempfile
 import os
+os.environ["PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION"] = "python"
 import streamlit as st
 from langchain.document_loaders import PyPDFLoader
 from langchain.document_loaders import Docx2txtLoader
